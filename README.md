@@ -70,6 +70,12 @@ The results screen displays the user's final typing performance.
 
 ![Results Screen](screenshot-results.png)
 
+## LIVE DEMO
+
+[Open the ACCESSIBLE TYPING SPEED TESTER]
+
+  https://accessible-typing-speed-tester-xovqofozkwboxbjakuj6ku.streamlit.app/
+
 ## How to Run
 
 ### 1. Clone the repository
