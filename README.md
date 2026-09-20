@@ -50,6 +50,21 @@ The application provides two typing modes:
 - JavaScript
 - Web Speech API
 
+## Application Screenshots
+
+### Home Screen
+
+![Home Screen](screenshot-home.png)
+
+### Typing Test
+
+![Typing Test](screenshot-typing.png)
+
+### Results
+
+![Results](screenshot-results.png)
+
+
 ## How to Run
 
 ### 1. Clone the repository
