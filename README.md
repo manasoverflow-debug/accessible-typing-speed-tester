@@ -54,16 +54,21 @@ The application provides two typing modes:
 
 ### Home Screen
 
+The opening interface provides two modes: Normal Mode and Voice-Assisted Mode.
+
 ![Home Screen](screenshot-home.png)
 
 ### Typing Test
 
+The typing interface displays the passage and provides real-time typing statistics such as WPM, accuracy, correct characters, incorrect characters, errors, and time.
+
 ![Typing Test](screenshot-typing.png)
 
-### Results
+### Results Screen
 
-![Results](screenshot-results.png)
+The results screen displays the user's final typing performance.
 
+![Results Screen](screenshot-results.png)
 
 ## How to Run
 
