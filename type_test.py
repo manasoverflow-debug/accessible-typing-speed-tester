@@ -3056,7 +3056,5 @@ showHistory();
 components.html(
     html_code,
     height=1400,
-    scrolling=true
-)_
     scrolling=True
 )
