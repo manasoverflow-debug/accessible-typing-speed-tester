@@ -158,7 +158,7 @@ The goal is to make typing practice more accessible instead of relying only on v
 
 The home page allows users to select their preferred typing mode and configure the test.
 
-![Accessible Typing Speed Tester Home](screenshot-home.png)
+![Accessible Typing Speed Tester Home](screenshot-mode.png)
 
 ---
 
