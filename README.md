@@ -1,84 +1,210 @@
-# Accessible Typing Speed Tester
+# ♿ Accessible Typing Speed Tester
 
-An accessibility-focused typing speed testing application built with Python, Streamlit, HTML, CSS, and JavaScript.
+An accessible and user-friendly typing speed testing application designed to make typing practice easier for users with different accessibility needs, including users who rely on screen readers or speech output.
 
-The application provides two typing modes:
+The application provides multiple typing modes, voice assistance, adjustable speech settings, live performance statistics, and accessible controls.
 
-- Normal Mode
-- Voice-Assisted Mode
+---
 
-## Features
+## 🚀 Live Demo
 
-### Normal Mode
+🔗 **Live Demo:**  
+[Open the Accessible Typing Speed Tester](YOUR_STREAMLIT_APP_LINK_HERE)
 
-- Standard typing speed test
-- Random typing passages
-- Automatic timer
-- Real-time WPM calculation
-- Accuracy calculation
+---
+
+## 📌 Project Overview
+
+The **Accessible Typing Speed Tester** is a web-based typing practice application developed using Python and Streamlit.
+
+Unlike a traditional typing test, this project focuses on **accessibility and voice-assisted interaction**.
+
+Users can:
+
+- Practice typing using different modes
+- Listen to the typing passage using speech output
+- Adjust speech speed and volume
+- Choose different test durations
+- Monitor typing performance in real time
+- Pause, resume, replay, finish, and restart tests
+- View detailed typing results
+- Try another test with a fresh passage
+- Use the application with keyboard and screen-reader-friendly controls
+
+The project was designed with accessibility as one of its primary goals.
+
+---
+
+## ✨ Features
+
+### ⌨️ Multiple Typing Modes
+
+The application provides three different typing modes:
+
+#### 1. Normal Mode
+
+A traditional typing test where the complete passage is displayed on the screen.
+
+Available durations:
+
+- 30 seconds
+- 60 seconds
+- 120 seconds
+- Complete Passage
+
+---
+
+#### 2. Voice-Assisted Mode 🔊
+
+The passage can be read aloud using the browser's speech synthesis functionality.
+
+Users can customize:
+
+- Voice
+- Speech speed
+- Speech volume
+- Test duration
+
+Available durations:
+
+- 30 seconds
+- 60 seconds
+- 120 seconds
+- Complete Passage
+
+This mode is especially useful for users who benefit from auditory assistance.
+
+---
+
+#### 3. Word-by-Word Voice Mode 🗣️
+
+A specialized accessibility mode that reads the passage one word at a time.
+
+As the user approaches the end of the current word, the application automatically announces the next word.
+
+Available durations:
+
+- 30 seconds
+- 60 seconds
+
+The 30-second test uses a 4-line passage, while the 60-second test uses an 8-line passage.
+
+This mode helps users follow the passage without needing to continuously look at the screen.
+
+---
+
+## 📊 Live Typing Statistics
+
+During the test, users can monitor their performance in real time.
+
+The application tracks:
+
+- Words Per Minute (WPM)
+- Accuracy
+- Correct Characters
+- Incorrect Characters
+- Errors
+- Correct Words
+
+The statistics update while the user is typing.
+
+---
+
+## 🏆 Results
+
+After completing a test, the application displays a detailed result summary.
+
+Results include:
+
+- Final WPM
+- Accuracy
 - Correct characters
 - Incorrect characters
-- Error count
+- Number of errors
 - Correct words
-- Test completion time
+- Time taken
+- Total typed characters
 
-### Voice-Assisted Mode
+Users can also start another test immediately.
 
-- Automatic passage reading
-- Browser-based text-to-speech
+---
+
+## 🔊 Accessibility Features
+
+Accessibility was a major focus of this project.
+
+The application includes:
+
+- Voice-assisted typing
+- Word-by-word speech
 - Adjustable speech speed
-- Adjustable voice volume
-- Selectable browser voices
-- Replay passage functionality
-- Accessibility-focused interface
-
-## Accessibility Features
-
-- High-contrast interface
-- Large text
+- Adjustable speech volume
 - Keyboard-friendly controls
-- Voice-assisted testing
-- Screen-reader-friendly status information
-- Audio-first testing option
+- Clear interface structure
+- Large, readable controls
+- High-contrast dark interface
+- Live feedback while typing
+- Pause and resume functionality
+- Replay functionality
+- Screen-reader-friendly text content
 
-## Technologies Used
+The goal is to make typing practice more accessible instead of relying only on visual interaction.
 
-- Python
-- Streamlit
-- HTML
-- CSS
-- JavaScript
-- Web Speech API
+---
 
-## Application Screenshots
+# 🖥️ Screenshots
 
-### Home Screen
+## 🏠 Home Page
 
-The opening interface provides two modes: Normal Mode and Voice-Assisted Mode.
+The home page allows users to select their preferred typing mode and configure the test.
 
-![Home Screen](screenshot-home.png)
+![Accessible Typing Speed Tester Home](screenshot-home.png)
 
-### Typing Test
+---
 
-The typing interface displays the passage and provides real-time typing statistics such as WPM, accuracy, correct characters, incorrect characters, errors, and time.
+## ⌨️ Typing Test
 
-![Typing Test](screenshot-typing.png)
+The typing interface displays the selected passage and provides live typing statistics while the user completes the test.
 
-### Results Screen
+![Accessible Typing Speed Tester Typing Test](screenshot-typing.png)
 
-The results screen displays the user's final typing performance.
+---
 
-![Results Screen](screenshot-results.png)
+## 📊 Test Results
 
-## LIVE DEMO
+After completing the test, users receive detailed performance statistics.
 
-[Open the ACCESSIBLE TYPING SPEED TESTER]
+![Accessible Typing Speed Tester Results](screenshot-results.png)
 
-  https://accessible-typing-speed-tester-xovqofozkwboxbjakuj6ku.streamlit.app/
+---
 
-## How to Run
+# 🛠️ Technologies Used
 
-### 1. Clone the repository
+The project was built using:
 
-```bash
-git clone https://github.com/YOUR-USERNAME/accessible-typing-speed-tester.git
+- **Python**
+- **Streamlit**
+- **HTML**
+- **CSS**
+- **JavaScript**
+- **Web Speech API**
+- **Browser Speech Synthesis**
+- **Git**
+- **GitHub**
+- **Streamlit Community Cloud**
+
+---
+
+# 📂 Project Structure
+
+```text
+accessible-typing-speed-tester/
+│
+├── type_test.py
+├── requirements.txt
+├── README.md
+├── .gitignore
+│
+├── screenshot-home.png
+├── screenshot-typing.png
+└── screenshot-results.png
