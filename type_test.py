@@ -11,7 +11,9 @@ st.set_page_config(
 html_code = r"""
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 
 <meta name="viewport"
@@ -53,7 +55,7 @@ h1 {
 
 .mode-container {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 22px;
     margin-bottom: 25px;
 }
@@ -82,6 +84,10 @@ h1 {
 
 .voice-card {
     border-color: #9b6cff;
+}
+
+.word-card {
+    border-color: #20b486;
 }
 
 .setting {
@@ -148,9 +154,10 @@ input:focus {
     outline-offset: 2px;
 }
 
-.voice-start {
-    background: #8b5cf6;
-}
+/*
+   ALL THREE START BUTTONS NOW USE THE SAME STYLE.
+   No separate voice or word start colors.
+*/
 
 .secondary {
     background: #3d4653;
@@ -203,6 +210,7 @@ input:focus {
     line-height: 1.8;
     min-height: 150px;
     margin-bottom: 20px;
+    white-space: pre-line;
 }
 
 textarea {
@@ -314,11 +322,15 @@ textarea {
     color: #dbe1ea;
 }
 
-@media (max-width: 850px) {
+@media (max-width: 1050px) {
 
     .mode-container {
         grid-template-columns: 1fr;
     }
+
+}
+
+@media (max-width: 850px) {
 
     .stats {
         grid-template-columns: repeat(3, 1fr);
@@ -359,6 +371,7 @@ textarea {
 }
 
 </style>
+
 </head>
 
 <body>
@@ -374,6 +387,8 @@ Choose a typing mode to begin
 <div id="openingScreen">
 
 <div class="mode-container">
+
+<!-- NORMAL MODE -->
 
 <div class="mode-card normal-card">
 
@@ -392,10 +407,21 @@ Test Duration
 
 <select id="normalDuration">
 
-<option value="30">30 seconds</option>
-<option value="60" selected>60 seconds</option>
-<option value="120">120 seconds</option>
-<option value="passage">Complete Passage</option>
+<option value="30">
+30 seconds
+</option>
+
+<option value="60" selected>
+60 seconds
+</option>
+
+<option value="120">
+120 seconds
+</option>
+
+<option value="passage">
+Complete Passage
+</option>
 
 </select>
 
@@ -408,13 +434,15 @@ Start Normal Test
 </div>
 
 
+<!-- VOICE MODE -->
+
 <div class="mode-card voice-card">
 
 <h2>🔊 Voice-Assisted Mode</h2>
 
 <p>
-The passage will automatically be read aloud when you
-start the test. Adjust the voice settings below first.
+The complete passage will automatically be read aloud
+when you start the test. Adjust the voice settings below.
 </p>
 
 <div class="setting">
@@ -424,7 +452,9 @@ Voice
 </label>
 
 <select id="voiceSelect">
-<option>Loading voices...</option>
+<option>
+Loading voices...
+</option>
 </select>
 
 </div>
@@ -443,13 +473,13 @@ Speech Speed
     min="0.5"
     max="2"
     step="0.1"
-    value="1"
+    value="0.7"
 >
 
 <span
     id="rateValue"
     class="value-display">
-1.0x
+0.7x
 </span>
 
 </div>
@@ -491,19 +521,67 @@ Test Duration
 
 <select id="voiceDuration">
 
-<option value="30">30 seconds</option>
-<option value="60" selected>60 seconds</option>
-<option value="120">120 seconds</option>
-<option value="passage">Complete Passage</option>
+<option value="30">
+30 seconds
+</option>
+
+<option value="60" selected>
+60 seconds
+</option>
+
+<option value="120">
+120 seconds
+</option>
+
+<option value="passage">
+Complete Passage
+</option>
 
 </select>
 
 </div>
 
-<button
-    id="voiceStart"
-    class="voice-start">
+<button id="voiceStart">
 Start Voice Test
+</button>
+
+</div>
+
+
+<!-- WORD BY WORD MODE -->
+
+<div class="mode-card word-card">
+
+<h2>🗣️ Word-by-Word Voice</h2>
+
+<p>
+The tester reads one word at a time. As you approach
+the final three letters of the current word, the next
+word is spoken automatically.
+</p>
+
+<div class="setting">
+
+<label for="wordDuration">
+Test Duration
+</label>
+
+<select id="wordDuration">
+
+<option value="30">
+30 seconds
+</option>
+
+<option value="60" selected>
+60 seconds
+</option>
+
+</select>
+
+</div>
+
+<button id="wordStart">
+Start Word-by-Word Test
 </button>
 
 </div>
@@ -511,6 +589,9 @@ Start Voice Test
 </div>
 
 </div>
+
+
+<!-- TEST AREA -->
 
 <div id="testArea" class="hidden">
 
@@ -518,16 +599,11 @@ Start Voice Test
 
 <div>
 
-<div
-    id="testTitle"
-    class="test-title">
+<div id="testTitle" class="test-title">
 Typing Test
 </div>
 
-<div
-    id="status"
-    class="status"
-    aria-live="polite">
+<div id="status" class="status" aria-live="polite">
 Ready
 </div>
 
@@ -535,85 +611,131 @@ Ready
 
 </div>
 
+
 <div
     id="passage"
     class="passage-box"
     aria-live="polite">
 </div>
 
+
 <textarea
     id="typingArea"
     placeholder="Start typing here..."
     aria-label="Typing area"></textarea>
 
+
 <div class="stats">
 
 <div class="stat">
-<div id="liveWpm" class="stat-value">0</div>
-<div class="stat-label">WPM</div>
+
+<div id="liveWpm" class="stat-value">
+0
 </div>
+
+<div class="stat-label">
+WPM
+</div>
+
+</div>
+
 
 <div class="stat">
-<div id="liveAccuracy" class="stat-value">100%</div>
-<div class="stat-label">Accuracy</div>
+
+<div id="liveAccuracy" class="stat-value">
+100%
 </div>
+
+<div class="stat-label">
+Accuracy
+</div>
+
+</div>
+
 
 <div class="stat">
-<div id="liveCorrectChars" class="stat-value">0</div>
-<div class="stat-label">Correct Characters</div>
+
+<div id="liveCorrectChars" class="stat-value">
+0
 </div>
+
+<div class="stat-label">
+Correct Characters
+</div>
+
+</div>
+
 
 <div class="stat">
-<div id="liveIncorrectChars" class="stat-value">0</div>
-<div class="stat-label">Incorrect Characters</div>
+
+<div id="liveIncorrectChars" class="stat-value">
+0
 </div>
+
+<div class="stat-label">
+Incorrect Characters
+</div>
+
+</div>
+
 
 <div class="stat">
-<div id="liveErrors" class="stat-value">0</div>
-<div class="stat-label">Errors</div>
+
+<div id="liveErrors" class="stat-value">
+0
 </div>
+
+<div class="stat-label">
+Errors
+</div>
+
+</div>
+
 
 <div class="stat">
-<div id="liveTime" class="stat-value">0s</div>
-<div class="stat-label">Time</div>
+
+<div id="liveTime" class="stat-value">
+0s
+</div>
+
+<div class="stat-label">
+Time
 </div>
 
 </div>
+
+</div>
+
 
 <div class="controls">
 
-<button
-    id="pauseButton"
-    class="secondary">
+<button id="pauseButton" class="secondary">
 Pause
 </button>
 
-<button
-    id="replayButton"
-    class="voice-start hidden">
-🔊 Replay Passage
+<button id="replayButton" class="hidden">
+🔊 Replay
 </button>
 
-<button
-    id="finishButton"
-    class="success">
+<button id="finishButton" class="success">
 Finish Test
 </button>
 
-<button
-    id="restartButton"
-    class="danger">
+<button id="restartButton" class="danger">
 Restart
 </button>
 
 </div>
 
-<div id="message"
-     aria-live="polite">
+
+<div id="message" aria-live="polite">
 Your statistics will update while you type.
 </div>
 
 </div>
+
+
+<!-- RESULTS -->
 
 <div id="results" class="hidden">
 
@@ -624,60 +746,125 @@ Your statistics will update while you type.
 <div class="result-grid">
 
 <div class="result-card">
-<div id="resultWpm" class="result-number">0</div>
-<div class="result-name">WPM</div>
+
+<div id="resultWpm" class="result-number">
+0
 </div>
+
+<div class="result-name">
+WPM
+</div>
+
+</div>
+
 
 <div class="result-card">
-<div id="resultAccuracy" class="result-number">0%</div>
-<div class="result-name">Accuracy</div>
+
+<div id="resultAccuracy" class="result-number">
+0%
 </div>
+
+<div class="result-name">
+Accuracy
+</div>
+
+</div>
+
 
 <div class="result-card">
-<div id="resultCorrectChars" class="result-number">0</div>
-<div class="result-name">Correct Characters</div>
+
+<div id="resultCorrectChars" class="result-number">
+0
 </div>
+
+<div class="result-name">
+Correct Characters
+</div>
+
+</div>
+
 
 <div class="result-card">
-<div id="resultIncorrectChars" class="result-number">0</div>
-<div class="result-name">Incorrect Characters</div>
+
+<div id="resultIncorrectChars" class="result-number">
+0
 </div>
+
+<div class="result-name">
+Incorrect Characters
+</div>
+
+</div>
+
 
 <div class="result-card">
-<div id="resultErrors" class="result-number">0</div>
-<div class="result-name">Errors</div>
+
+<div id="resultErrors" class="result-number">
+0
 </div>
+
+<div class="result-name">
+Errors
+</div>
+
+</div>
+
 
 <div class="result-card">
-<div id="resultCorrectWords" class="result-number">0</div>
-<div class="result-name">Correct Words</div>
+
+<div id="resultCorrectWords" class="result-number">
+0
 </div>
+
+<div class="result-name">
+Correct Words
+</div>
+
+</div>
+
 
 <div class="result-card">
-<div id="resultTime" class="result-number">0s</div>
-<div class="result-name">Time</div>
+
+<div id="resultTime" class="result-number">
+0s
 </div>
+
+<div class="result-name">
+Time
+</div>
+
+</div>
+
 
 <div class="result-card">
-<div id="resultTotalChars" class="result-number">0</div>
-<div class="result-name">Typed Characters</div>
+
+<div id="resultTotalChars" class="result-number">
+0
+</div>
+
+<div class="result-name">
+Typed Characters
 </div>
 
 </div>
+
+</div>
+
 
 <div class="controls">
 
-<button
-    id="anotherTest"
-    class="success">
-Start Another Test
+<button id="anotherTest" class="success">
+Try Another Test
 </button>
 
 </div>
 
+
 <div class="history">
 
-<h3>Recent Test History</h3>
+<h3>
+Recent Test History
+</h3>
 
 <table>
 
@@ -708,80 +895,93 @@ html_code += r"""
 
 <script>
 
-const passages = [
+/* =========================================================
+   PASSAGE DATA
+   ========================================================= */
 
-"Technology has changed the way people learn, work, communicate, and solve problems. With the right tools, information can be organized and shared quickly.",
+const passageLines = [
 
-"Learning to type accurately is an important computer skill. Regular practice can improve speed, confidence, concentration, and overall productivity.",
+"Technology has changed the way people learn, work, communicate, and solve problems.",
 
-"Artificial intelligence is becoming an important part of modern technology. It can help people analyze information, recognize patterns, and make useful predictions.",
+"With the right tools, information can be organized and shared quickly.",
 
-"Good communication requires patience and attention. Listening carefully and expressing ideas clearly can help people understand one another more effectively.",
+"Learning to type accurately is an important computer skill.",
 
-"Every successful project begins with a clear goal. Breaking a large task into smaller steps makes it easier to plan, complete, and evaluate.",
+"Regular practice can improve speed, confidence, concentration, and productivity.",
 
-"Computers are powerful tools for education and creativity. Students can use them to research information, write programs, create presentations, and explore new ideas.",
+"Artificial intelligence can help people analyze information and recognize useful patterns.",
 
-"Accessibility makes technology easier to use for everyone. Features such as screen readers, speech recognition, keyboard navigation, and text enlargement can remove barriers.",
+"Modern software allows people to solve complex problems more efficiently.",
 
-"Practice is one of the most effective ways to improve a skill. Small improvements made consistently can produce significant results over time.",
+"Good communication requires patience, attention, and clear expression.",
 
-"The internet provides access to an enormous amount of information. However, users should always check important information against trustworthy sources.",
+"Listening carefully can help people understand different ideas and perspectives.",
 
-"Modern factories use sensors and software to monitor machines and production processes. Data can help engineers identify problems before they become serious.",
+"Every successful project begins with a clear goal and a practical plan.",
 
-"Data analysis helps organizations understand what is happening in their systems. Good analysis combines accurate data, appropriate methods, and careful interpretation.",
+"Breaking a large task into smaller steps makes it easier to complete.",
 
-"Programming teaches people how to break complex problems into logical steps. A well-designed program is easier to understand, test, maintain, and improve.",
+"Computers are powerful tools for education, creativity, and research.",
 
-"Time management can make difficult tasks feel more manageable. Setting priorities and working on one important task at a time can improve focus.",
+"Students can use technology to write programs, create presentations, and explore ideas.",
 
-"Reading regularly can strengthen vocabulary and comprehension. It also exposes people to different ideas, writing styles, experiences, and perspectives.",
+"Accessibility makes technology easier to use for everyone.",
 
-"Problem solving involves identifying the problem, understanding the available information, considering possible solutions, and evaluating the result.",
+"Screen readers, speech output, and keyboard navigation can remove barriers.",
 
-"Cloud computing allows people to access applications and data through internet-connected services. It has become an important part of modern digital infrastructure.",
+"Practice is one of the most effective ways to improve a skill.",
 
-"Cybersecurity helps protect computers, networks, accounts, and information from unauthorized access. Strong passwords and careful online behavior are important safeguards.",
+"Small improvements made consistently can produce significant results over time.",
 
-"Good software should be useful, reliable, understandable, and accessible. Testing is important because even small problems can affect the user experience.",
+"The internet provides access to an enormous amount of information.",
 
-"Learning something new does not require perfection. Mistakes provide useful information about what needs more practice and attention.",
+"Important information should always be checked against trustworthy sources.",
 
-"Digital skills are increasingly valuable in education and employment. Understanding common software and online tools can make many tasks easier.",
+"Modern factories use sensors and software to monitor machines and production.",
 
-"Successful teamwork depends on communication, responsibility, respect, and a shared understanding of the goal. Each person can contribute different strengths.",
+"Data can help engineers identify problems before they become serious.",
 
-"Science helps us understand the world through observation, experimentation, evidence, and careful reasoning. New discoveries often lead to new questions.",
+"Data analysis helps organizations understand what is happening in their systems.",
 
-"A healthy learning routine includes focused practice as well as regular breaks. Giving the mind time to rest can help maintain attention.",
+"Good analysis combines accurate data, appropriate methods, and careful interpretation.",
 
-"Maps, charts, and visualizations can make complex information easier to understand. The best visualization depends on the question being asked.",
+"Programming teaches people to break complex problems into logical steps.",
 
-"Good decisions are easier to make when people clearly understand the available choices and the possible consequences of each option.",
+"A well-designed program is easier to understand, test, maintain, and improve.",
 
-"Modern applications often combine databases, user interfaces, software services, and automated processes. These components work together to provide useful experiences.",
+"Time management can make difficult tasks feel more manageable.",
 
-"Typing tests measure several aspects of performance. Speed is important, but accuracy and consistency are also valuable indicators of typing skill.",
+"Setting priorities can improve focus when several tasks need attention.",
 
-"Voice technology can make computers more accessible. Speech output allows users to receive information without relying entirely on visual interfaces.",
+"Reading regularly can strengthen vocabulary and comprehension.",
 
-"Education is a continuous process. People can develop new skills throughout their lives by practicing, asking questions, and exploring unfamiliar subjects.",
+"It also exposes people to different ideas, writing styles, and experiences.",
 
-"Clear instructions make technical tasks easier to complete. When instructions are organized into logical steps, users can understand what to do and why it matters."
+"Problem solving involves identifying a problem and evaluating possible solutions.",
+
+"Good decisions are easier when people understand their choices and consequences."
 
 ];
 
 
+/* =========================================================
+   VARIABLES
+   ========================================================= */
+
 let currentMode = "";
+
 let currentPassage = "";
+
 let currentPassageIndex = -1;
 
 let testRunning = false;
+
 let testPaused = false;
 
 let startTime = 0;
+
 let pausedStarted = 0;
+
 let totalPausedTime = 0;
 
 let timerInterval = null;
@@ -794,9 +994,29 @@ let speechAvailable =
 let currentUtterance = null;
 
 
-/* ---------------------------------------------------------
+/*
+   Word-by-word variables.
+
+   IMPORTANT:
+   Instead of trying to guess which word the user is
+   currently typing, we store the exact start and end
+   position of EVERY word in the complete passage.
+
+   This fixes the 60-second / 8-line problem.
+*/
+
+let wordList = [];
+
+let currentWordIndex = 0;
+
+let lastWordTriggerIndex = -1;
+
+let wordModeStarted = false;
+
+
+/* =========================================================
    ELEMENT REFERENCES
---------------------------------------------------------- */
+   ========================================================= */
 
 const openingScreen =
     document.getElementById("openingScreen");
@@ -824,6 +1044,9 @@ const normalStart =
 
 const voiceStart =
     document.getElementById("voiceStart");
+
+const wordStart =
+    document.getElementById("wordStart");
 
 const pauseButton =
     document.getElementById("pauseButton");
@@ -861,36 +1084,124 @@ const normalDuration =
 const voiceDuration =
     document.getElementById("voiceDuration");
 
+const wordDuration =
+    document.getElementById("wordDuration");
 
-/* ---------------------------------------------------------
-   RANDOM PASSAGE
---------------------------------------------------------- */
 
-function getNewPassage() {
+/* =========================================================
+   PASSAGE LENGTH
+   ========================================================= */
 
-    let index;
+function getRequiredLineCount(duration) {
 
-    do {
+    if (duration === "30") {
+        return 4;
+    }
 
-        index =
-            Math.floor(
-                Math.random() * passages.length
-            );
+    if (duration === "60") {
+        return 8;
+    }
 
-    } while (
-        passages.length > 1 &&
-        index === currentPassageIndex
-    );
+    /*
+       These remain for Normal Mode and
+       Voice-Assisted Mode.
+    */
 
-    currentPassageIndex = index;
+    if (duration === "120") {
+        return 15;
+    }
 
-    return passages[index];
+    return 15;
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
+   CREATE NEW PASSAGE
+   ========================================================= */
+
+function getNewPassage(duration) {
+
+    const requiredLines =
+        getRequiredLineCount(duration);
+
+    let available =
+        [...passageLines];
+
+
+    /*
+       Prevent the first line of the previous passage
+       from immediately appearing again.
+    */
+
+    if (
+        currentPassageIndex >= 0 &&
+        available.length > requiredLines
+    ) {
+
+        const previousFirstLine =
+            currentPassage
+                .split("\n")[0];
+
+        available =
+            available.filter(
+                function(line) {
+
+                    return line !==
+                        previousFirstLine;
+
+                }
+            );
+
+    }
+
+
+    /*
+       Fisher-Yates shuffle.
+    */
+
+    for (
+        let i = available.length - 1;
+        i > 0;
+        i--
+    ) {
+
+        const j =
+            Math.floor(
+                Math.random() * (i + 1)
+            );
+
+        [
+            available[i],
+            available[j]
+        ] =
+        [
+            available[j],
+            available[i]
+        ];
+
+    }
+
+
+    const selectedLines =
+        available.slice(
+            0,
+            requiredLines
+        );
+
+
+    currentPassage =
+        selectedLines.join("\n");
+
+
+    currentPassageIndex++;
+
+    return currentPassage;
+}
+
+
+/* =========================================================
    VOICE LIST
---------------------------------------------------------- */
+   ========================================================= */
 
 function loadVoices() {
 
@@ -901,13 +1212,17 @@ function loadVoices() {
 
         voiceStart.disabled = true;
 
+        wordStart.disabled = true;
+
         return;
     }
+
 
     const voices =
         window.speechSynthesis.getVoices();
 
     voiceSelect.innerHTML = "";
+
 
     if (voices.length === 0) {
 
@@ -924,24 +1239,28 @@ function loadVoices() {
         return;
     }
 
-    voices.forEach((voice, index) => {
 
-        const option =
-            document.createElement("option");
+    voices.forEach(
+        function(voice, index) {
 
-        option.value = index;
+            const option =
+                document.createElement("option");
 
-        option.textContent =
-            voice.name +
-            " (" +
-            voice.lang +
-            ")";
+            option.value = index;
 
-        voiceSelect.appendChild(option);
+            option.textContent =
+                voice.name +
+                " (" +
+                voice.lang +
+                ")";
 
-    });
+            voiceSelect.appendChild(option);
+
+        }
+    );
 
 }
+
 
 if (speechAvailable) {
 
@@ -953,19 +1272,20 @@ if (speechAvailable) {
 }
 
 
-/* ---------------------------------------------------------
-   SPEECH SETTINGS
---------------------------------------------------------- */
+/* =========================================================
+   VOICE SETTINGS
+   ========================================================= */
 
 speechRate.addEventListener(
     "input",
     function() {
 
         rateValue.textContent =
-            Number(this.value).toFixed(1) + "x";
+            speechRate.value + "x";
 
     }
 );
+
 
 speechVolume.addEventListener(
     "input",
@@ -973,88 +1293,518 @@ speechVolume.addEventListener(
 
         volumeValue.textContent =
             Math.round(
-                Number(this.value) * 100
+                speechVolume.value * 100
             ) + "%";
 
     }
 );
 
 
-/* ---------------------------------------------------------
-   SPEAK PASSAGE
---------------------------------------------------------- */
+/* =========================================================
+   GET SELECTED VOICE
+   ========================================================= */
 
-function speakPassage() {
+function getSelectedVoice() {
 
     if (!speechAvailable) {
-
-        messageElement.textContent =
-            "Your browser does not support speech synthesis.";
-
-        return;
-
+        return null;
     }
-
-    window.speechSynthesis.cancel();
-
-    currentUtterance =
-        new SpeechSynthesisUtterance(
-            currentPassage
-        );
-
-    currentUtterance.rate =
-        Number(speechRate.value);
-
-    currentUtterance.volume =
-        Number(speechVolume.value);
 
     const voices =
         window.speechSynthesis.getVoices();
 
     const selectedIndex =
-        Number(voiceSelect.value);
+        parseInt(
+            voiceSelect.value
+        );
 
     if (
-        voices.length > 0 &&
         !isNaN(selectedIndex) &&
         voices[selectedIndex]
     ) {
 
-        currentUtterance.voice =
-            voices[selectedIndex];
+        return voices[selectedIndex];
 
     }
 
-    currentUtterance.onstart =
-        function() {
+    return null;
+}
 
-            messageElement.textContent =
-                "🔊 Passage is being read aloud.";
 
-        };
+/* =========================================================
+   SPEAK COMPLETE PASSAGE
+   ========================================================= */
 
-    currentUtterance.onend =
-        function() {
+function speakPassage() {
 
-            if (testRunning) {
+    if (
+        !speechAvailable ||
+        !currentPassage
+    ) {
 
-                messageElement.textContent =
-                    "Voice reading finished. Continue typing.";
+        return;
 
-            }
+    }
 
-        };
+
+    window.speechSynthesis.cancel();
+
+
+    const utterance =
+        new SpeechSynthesisUtterance(
+            currentPassage
+        );
+
+
+    const selectedVoice =
+        getSelectedVoice();
+
+
+    if (selectedVoice) {
+        utterance.voice =
+            selectedVoice;
+    }
+
+
+    utterance.rate =
+        parseFloat(
+            speechRate.value
+        );
+
+
+    utterance.volume =
+        parseFloat(
+            speechVolume.value
+        );
+
+
+    currentUtterance =
+        utterance;
+
 
     window.speechSynthesis.speak(
-        currentUtterance
+        utterance
     );
 
 }
 
 
-/* ---------------------------------------------------------
-   TIMER
---------------------------------------------------------- */
+/* =========================================================
+   BUILD WORD POSITION LIST
+   ========================================================= */
+
+/*
+   This is the important fix.
+
+   Every word receives:
+
+   - its word number
+   - its exact position in the passage
+   - its exact ending position
+
+   Newlines are included naturally because the positions
+   come directly from the actual passage string.
+*/
+
+function buildWordList() {
+
+    wordList = [];
+
+    const regex =
+        /\S+/g;
+
+    let match;
+
+
+    while (
+        (match = regex.exec(currentPassage))
+        !== null
+    ) {
+
+        wordList.push({
+
+            word:
+                match[0],
+
+            start:
+                match.index,
+
+            end:
+                match.index +
+                match[0].length
+
+        });
+
+    }
+
+
+    currentWordIndex = 0;
+
+    lastWordTriggerIndex = -1;
+
+}
+
+
+/* =========================================================
+   SPEAK ONE WORD
+   ========================================================= */
+
+function speakWordAt(index) {
+
+    if (
+        !speechAvailable ||
+        index < 0 ||
+        index >= wordList.length
+    ) {
+
+        return;
+
+    }
+
+
+    const word =
+        wordList[index].word;
+
+
+    /*
+       Do not speak the same word repeatedly.
+    */
+
+    if (
+        index <= lastWordTriggerIndex
+    ) {
+
+        return;
+
+    }
+
+
+    window.speechSynthesis.cancel();
+
+
+    const utterance =
+        new SpeechSynthesisUtterance(
+            word
+        );
+
+
+    const selectedVoice =
+        getSelectedVoice();
+
+
+    if (selectedVoice) {
+
+        utterance.voice =
+            selectedVoice;
+
+    }
+
+
+    utterance.rate =
+        parseFloat(
+            speechRate.value
+        );
+
+
+    utterance.volume =
+        parseFloat(
+            speechVolume.value
+        );
+
+
+    currentUtterance =
+        utterance;
+
+
+    window.speechSynthesis.speak(
+        utterance
+    );
+
+
+    /*
+       Mark this word as announced.
+    */
+
+    lastWordTriggerIndex =
+        index;
+
+}
+
+
+/* =========================================================
+   INITIALIZE WORD MODE
+   ========================================================= */
+
+function initializeWordMode() {
+
+    buildWordList();
+
+
+    wordModeStarted = true;
+
+
+    /*
+       Speak the first word immediately.
+    */
+
+    if (
+        wordList.length > 0
+    ) {
+
+        window.speechSynthesis.cancel();
+
+
+        const firstWord =
+            wordList[0].word;
+
+
+        const utterance =
+            new SpeechSynthesisUtterance(
+                firstWord
+            );
+
+
+        const selectedVoice =
+            getSelectedVoice();
+
+
+        if (selectedVoice) {
+
+            utterance.voice =
+                selectedVoice;
+
+        }
+
+
+        utterance.rate =
+            parseFloat(
+                speechRate.value
+            );
+
+
+        utterance.volume =
+            parseFloat(
+                speechVolume.value
+            );
+
+
+        currentUtterance =
+            utterance;
+
+
+        window.speechSynthesis.speak(
+            utterance
+        );
+
+
+        lastWordTriggerIndex = 0;
+
+    }
+
+}
+
+
+/* =========================================================
+   WORD-BY-WORD SPEECH PROCESSING
+   ========================================================= */
+
+function updateWordByWordSpeech() {
+
+    if (
+        !wordModeStarted ||
+        wordList.length === 0 ||
+        testPaused
+    ) {
+
+        return;
+
+    }
+
+
+    const typedLength =
+        typingArea.value.length;
+
+
+    /*
+       Find the word that corresponds to the current
+       typing position.
+
+       Because the complete passage is used here, this
+       continues correctly through ALL 8 lines.
+    */
+
+    let activeWordIndex =
+        wordList.length - 1;
+
+
+    for (
+        let i = 0;
+        i < wordList.length;
+        i++
+    ) {
+
+        if (
+            typedLength <=
+            wordList[i].end
+        ) {
+
+            activeWordIndex = i;
+
+            break;
+
+        }
+
+    }
+
+
+    currentWordIndex =
+        activeWordIndex;
+
+
+    /*
+       Trigger the NEXT word when the user reaches
+       the final three characters of the current word.
+
+       Example:
+       "computer" has 8 letters.
+       Next word is triggered at character 5,
+       leaving approximately 3 letters.
+    */
+
+    const currentWord =
+        wordList[activeWordIndex];
+
+
+    if (!currentWord) {
+        return;
+    }
+
+
+    const triggerPosition =
+        Math.max(
+            currentWord.start + 1,
+            currentWord.end - 3
+        );
+
+
+    if (
+        typedLength >= triggerPosition &&
+        activeWordIndex + 1 < wordList.length &&
+        lastWordTriggerIndex <= activeWordIndex
+    ) {
+
+        speakWordAt(
+            activeWordIndex + 1
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   RESET EVERYTHING
+   ========================================================= */
+
+function resetTestState() {
+
+    if (speechAvailable) {
+
+        window.speechSynthesis.cancel();
+
+    }
+
+
+    clearInterval(
+        timerInterval
+    );
+
+    timerInterval = null;
+
+
+    testRunning = false;
+
+    testPaused = false;
+
+    startTime = 0;
+
+    pausedStarted = 0;
+
+    totalPausedTime = 0;
+
+
+    wordList = [];
+
+    currentWordIndex = 0;
+
+    lastWordTriggerIndex = -1;
+
+    wordModeStarted = false;
+
+
+    typingArea.value = "";
+
+    typingArea.disabled = false;
+
+
+    pauseButton.textContent =
+        "Pause";
+
+
+    statusElement.textContent =
+        "Ready";
+
+
+    messageElement.textContent =
+        "Your statistics will update while you type.";
+
+
+    resetLiveStats();
+
+}
+
+
+/* =========================================================
+   RESET LIVE STATISTICS
+   ========================================================= */
+
+function resetLiveStats() {
+
+    document.getElementById(
+        "liveWpm"
+    ).textContent = "0";
+
+
+    document.getElementById(
+        "liveAccuracy"
+    ).textContent = "100%";
+
+
+    document.getElementById(
+        "liveCorrectChars"
+    ).textContent = "0";
+
+
+    document.getElementById(
+        "liveIncorrectChars"
+    ).textContent = "0";
+
+
+    document.getElementById(
+        "liveErrors"
+    ).textContent = "0";
+
+
+    document.getElementById(
+        "liveTime"
+    ).textContent = "0s";
+
+}
+
+
+/* =========================================================
+   ELAPSED TIME
+   ========================================================= */
 
 function getElapsedSeconds() {
 
@@ -1062,70 +1812,106 @@ function getElapsedSeconds() {
         return 0;
     }
 
-    let now =
+
+    const now =
         performance.now();
 
-    let pausedTime =
-        totalPausedTime;
-
-    if (testPaused) {
-
-        pausedTime +=
-            now - pausedStarted;
-
-    }
 
     let elapsed =
-        (
-            now -
-            startTime -
-            pausedTime
-        ) / 1000;
-
-    return Math.max(0, elapsed);
-
-}
-
-
-function startTimer() {
-
-    clearInterval(timerInterval);
-
-    timerInterval =
-        setInterval(
-            updateTimer,
-            100
-        );
-
-}
-
-
-function updateTimer() {
-
-    if (!testRunning) {
-        return;
-    }
-
-    const elapsed =
-        getElapsedSeconds();
-
-    const rounded =
-        Math.floor(elapsed);
-
-    document.getElementById(
-        "liveTime"
-    ).textContent =
-        rounded + "s";
+        now -
+        startTime -
+        totalPausedTime;
 
 
     if (
-        selectedDuration !== "passage" &&
-        elapsed >= Number(selectedDuration)
+        testPaused &&
+        pausedStarted > 0
     ) {
 
-        finishTest();
+        elapsed -=
+            now -
+            pausedStarted;
 
     }
+
+
+    return Math.max(
+        elapsed / 1000,
+        0
+    );
+
+}
+
+
+/* =========================================================
+   TIMER
+   ========================================================= */
+
+function startTimer() {
+
+    clearInterval(
+        timerInterval
+    );
+
+
+    timerInterval =
+        setInterval(
+            function() {
+
+                if (
+                    !testRunning ||
+                    testPaused
+                ) {
+
+                    return;
+
+                }
+
+
+                const elapsed =
+                    getElapsedSeconds();
+
+
+                document.getElementById(
+                    "liveTime"
+                ).textContent =
+                    Math.floor(
+                        elapsed
+                    ) + "s";
+
+
+                updateLiveStats();
+
+
+                /*
+                   Automatic finish for timed tests.
+                */
+
+                if (
+                    selectedDuration !==
+                    "passage"
+                ) {
+
+                    const durationSeconds =
+                        parseInt(
+                            selectedDuration
+                        );
+
+
+                    if (
+                        elapsed >=
+                        durationSeconds
+                    ) {
+
+                        finishTest();
+
+                    }
+
+                }
+
+            },
+            100
+        );
 
 }
 
@@ -1133,33 +1919,77 @@ function updateTimer() {
 
 html_code += r"""
 
-/* ---------------------------------------------------------
+/* =========================================================
    START TEST
---------------------------------------------------------- */
+   ========================================================= */
 
 function startTest(mode) {
 
-    currentMode = mode;
+    resetTestState();
 
-    if (mode === "normal") {
+
+    currentMode =
+        mode;
+
+
+    /*
+       Get duration according to the selected mode.
+    */
+
+    if (
+        mode === "normal"
+    ) {
 
         selectedDuration =
             normalDuration.value;
 
-    } else {
+    }
+
+    else if (
+        mode === "voice"
+    ) {
 
         selectedDuration =
             voiceDuration.value;
 
     }
 
+    else if (
+        mode === "word"
+    ) {
+
+        selectedDuration =
+            wordDuration.value;
+
+    }
+
+
+    /*
+       Generate the correct number of lines.
+
+       Normal:
+       30 = 4
+       60 = 8
+       120 = 15
+       Passage = 15
+
+       Voice:
+       same as Normal
+
+       Word:
+       30 = 4
+       60 = 8
+    */
+
     currentPassage =
-        getNewPassage();
+        getNewPassage(
+            selectedDuration
+        );
+
 
     passageElement.textContent =
         currentPassage;
 
-    typingArea.value = "";
 
     openingScreen.classList.add(
         "hidden"
@@ -1173,111 +2003,136 @@ function startTest(mode) {
         "hidden"
     );
 
+
     testRunning = true;
+
     testPaused = false;
 
     startTime =
         performance.now();
 
     pausedStarted = 0;
+
     totalPausedTime = 0;
+
 
     pauseButton.textContent =
         "Pause";
 
-    statusElement.textContent =
+
+    /*
+       Test title.
+    */
+
+    if (
+        mode === "normal"
+    ) {
+
+        document.getElementById(
+            "testTitle"
+        ).textContent =
+            "⌨️ Normal Typing Test";
+
+        statusElement.textContent =
+            "Normal Typing Test";
+
+    }
+
+    else if (
         mode === "voice"
-        ? "Voice-Assisted Test"
-        : "Normal Typing Test";
+    ) {
+
+        document.getElementById(
+            "testTitle"
+        ).textContent =
+            "🔊 Voice-Assisted Typing Test";
+
+        statusElement.textContent =
+            "Voice-Assisted Test";
+
+    }
+
+    else {
+
+        document.getElementById(
+            "testTitle"
+        ).textContent =
+            "🗣️ Word-by-Word Voice Test";
+
+        statusElement.textContent =
+            "Word-by-Word Voice Test";
+
+    }
+
 
     messageElement.textContent =
         "Start typing the passage.";
 
+
+    /*
+       Replay is available for both voice modes.
+    */
+
     replayButton.classList.toggle(
         "hidden",
-        mode !== "voice"
+        mode === "normal"
     );
-
-    document.getElementById(
-        "testTitle"
-    ).textContent =
-        mode === "voice"
-        ? "🔊 Voice-Assisted Typing Test"
-        : "⌨️ Normal Typing Test";
 
 
     resetLiveStats();
 
+
     startTimer();
 
+
     /*
-       IMPORTANT:
-       Speech is started directly from the Start button
-       event path so browsers are much more likely to
-       allow automatic speech playback.
+       Start voice behavior.
     */
 
-    if (mode === "voice") {
+    if (
+        mode === "voice"
+    ) {
 
         speakPassage();
 
     }
+
+
+    if (
+        mode === "word"
+    ) {
+
+        initializeWordMode();
+
+    }
+
 
     typingArea.focus();
 
 }
 
 
-/* ---------------------------------------------------------
-   RESET LIVE STATS
---------------------------------------------------------- */
-
-function resetLiveStats() {
-
-    document.getElementById(
-        "liveWpm"
-    ).textContent = "0";
-
-    document.getElementById(
-        "liveAccuracy"
-    ).textContent = "100%";
-
-    document.getElementById(
-        "liveCorrectChars"
-    ).textContent = "0";
-
-    document.getElementById(
-        "liveIncorrectChars"
-    ).textContent = "0";
-
-    document.getElementById(
-        "liveErrors"
-    ).textContent = "0";
-
-    document.getElementById(
-        "liveTime"
-    ).textContent = "0s";
-
-}
-
-
-/* ---------------------------------------------------------
+/* =========================================================
    CALCULATE STATISTICS
---------------------------------------------------------- */
+   ========================================================= */
 
 function calculateStatistics() {
 
     const typed =
         typingArea.value;
 
+
     let correctChars = 0;
+
     let incorrectChars = 0;
+
 
     const compareLength =
         Math.min(
             typed.length,
             currentPassage.length
         );
+
 
     for (
         let i = 0;
@@ -1292,13 +2147,16 @@ function calculateStatistics() {
 
             correctChars++;
 
-        } else {
+        }
+
+        else {
 
             incorrectChars++;
 
         }
 
     }
+
 
     if (
         typed.length >
@@ -1311,16 +2169,22 @@ function calculateStatistics() {
 
     }
 
+
     const totalTyped =
         typed.length;
+
 
     const totalChecked =
         correctChars +
         incorrectChars;
 
+
     let accuracy = 100;
 
-    if (totalChecked > 0) {
+
+    if (
+        totalChecked > 0
+    ) {
 
         accuracy =
             (
@@ -1330,34 +2194,41 @@ function calculateStatistics() {
 
     }
 
+
     const elapsed =
         Math.max(
             getElapsedSeconds(),
             0.1
         );
 
+
     const minutes =
         elapsed / 60;
 
+
     const wpm =
         minutes > 0
-        ? (correctChars / 5) / minutes
+        ? (
+            correctChars / 5
+          ) / minutes
         : 0;
 
-
-    /*
-       Count words that are completely correct.
-    */
 
     const typedWords =
         typed.trim() === ""
         ? []
         : typed.trim().split(/\s+/);
 
+
     const passageWords =
-        currentPassage.trim().split(/\s+/);
+        currentPassage
+            .replace(/\n/g, " ")
+            .trim()
+            .split(/\s+/);
+
 
     let correctWords = 0;
+
 
     for (
         let i = 0;
@@ -1380,23 +2251,32 @@ function calculateStatistics() {
 
     return {
 
-        wpm: Math.round(wpm),
+        wpm:
+            Math.round(
+                wpm
+            ),
 
         accuracy:
             Math.round(
                 accuracy * 10
             ) / 10,
 
-        correctChars,
+        correctChars:
+            correctChars,
 
-        incorrectChars,
+        incorrectChars:
+            incorrectChars,
 
-        errors: incorrectChars,
+        errors:
+            incorrectChars,
 
-        correctWords,
+        correctWords:
+            correctWords,
 
         time:
-            Math.floor(elapsed),
+            Math.floor(
+                elapsed
+            ),
 
         totalChars:
             totalTyped
@@ -1406,38 +2286,47 @@ function calculateStatistics() {
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    UPDATE LIVE STATISTICS
---------------------------------------------------------- */
+   ========================================================= */
 
 function updateLiveStats() {
 
     if (!testRunning) {
+
         return;
+
     }
+
 
     const stats =
         calculateStatistics();
+
 
     document.getElementById(
         "liveWpm"
     ).textContent =
         stats.wpm;
 
+
     document.getElementById(
         "liveAccuracy"
     ).textContent =
-        stats.accuracy + "%";
+        stats.accuracy +
+        "%";
+
 
     document.getElementById(
         "liveCorrectChars"
     ).textContent =
         stats.correctChars;
 
+
     document.getElementById(
         "liveIncorrectChars"
     ).textContent =
         stats.incorrectChars;
+
 
     document.getElementById(
         "liveErrors"
@@ -1447,19 +2336,47 @@ function updateLiveStats() {
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    TYPING INPUT
---------------------------------------------------------- */
+   ========================================================= */
 
 typingArea.addEventListener(
     "input",
     function() {
 
+        if (!testRunning) {
+
+            return;
+
+        }
+
+
         updateLiveStats();
 
+
+        /*
+           Word-by-word speech.
+
+           This now uses the exact positions of all words
+           in the entire passage.
+        */
+
         if (
-            selectedDuration ===
-            "passage" &&
+            currentMode === "word"
+        ) {
+
+            updateWordByWordSpeech();
+
+        }
+
+
+        /*
+           Complete Passage mode is still retained
+           for Normal and Voice-Assisted modes.
+        */
+
+        if (
+            selectedDuration === "passage" &&
             typingArea.value.length >=
             currentPassage.length
         ) {
@@ -1472,74 +2389,107 @@ typingArea.addEventListener(
 );
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    PAUSE / RESUME
---------------------------------------------------------- */
+   ========================================================= */
 
 function togglePause() {
 
     if (!testRunning) {
+
         return;
+
     }
+
 
     if (!testPaused) {
 
         testPaused = true;
 
+
         pausedStarted =
             performance.now();
+
 
         pauseButton.textContent =
             "Resume";
 
+
         statusElement.textContent =
             "Paused";
+
 
         messageElement.textContent =
             "Test paused.";
 
-        if (
-            currentMode === "voice" &&
-            speechAvailable
-        ) {
+
+        if (speechAvailable) {
 
             window.speechSynthesis.pause();
 
         }
 
+
         typingArea.disabled = true;
 
-    } else {
+    }
+
+    else {
 
         const now =
             performance.now();
 
+
         totalPausedTime +=
-            now - pausedStarted;
+            now -
+            pausedStarted;
+
 
         pausedStarted = 0;
 
         testPaused = false;
 
+
         pauseButton.textContent =
             "Pause";
 
-        statusElement.textContent =
+
+        if (
+            currentMode === "normal"
+        ) {
+
+            statusElement.textContent =
+                "Normal Typing Test";
+
+        }
+
+        else if (
             currentMode === "voice"
-            ? "Voice-Assisted Test"
-            : "Normal Typing Test";
+        ) {
+
+            statusElement.textContent =
+                "Voice-Assisted Test";
+
+        }
+
+        else {
+
+            statusElement.textContent =
+                "Word-by-Word Voice Test";
+
+        }
+
 
         messageElement.textContent =
             "Test resumed.";
 
-        if (
-            currentMode === "voice" &&
-            speechAvailable
-        ) {
+
+        if (speechAvailable) {
 
             window.speechSynthesis.resume();
 
         }
+
 
         typingArea.disabled = false;
 
@@ -1550,21 +2500,29 @@ function togglePause() {
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    FINISH TEST
---------------------------------------------------------- */
+   ========================================================= */
 
 function finishTest() {
 
     if (!testRunning) {
+
         return;
+
     }
 
+
     testRunning = false;
+
 
     clearInterval(
         timerInterval
     );
+
+
+    timerInterval = null;
+
 
     if (speechAvailable) {
 
@@ -1572,69 +2530,90 @@ function finishTest() {
 
     }
 
+
     typingArea.disabled = true;
+
 
     const stats =
         calculateStatistics();
+
 
     document.getElementById(
         "resultWpm"
     ).textContent =
         stats.wpm;
 
+
     document.getElementById(
         "resultAccuracy"
     ).textContent =
-        stats.accuracy + "%";
+        stats.accuracy +
+        "%";
+
 
     document.getElementById(
         "resultCorrectChars"
     ).textContent =
         stats.correctChars;
 
+
     document.getElementById(
         "resultIncorrectChars"
     ).textContent =
         stats.incorrectChars;
+
 
     document.getElementById(
         "resultErrors"
     ).textContent =
         stats.errors;
 
+
     document.getElementById(
         "resultCorrectWords"
     ).textContent =
         stats.correctWords;
 
+
     document.getElementById(
         "resultTime"
     ).textContent =
-        stats.time + "s";
+        stats.time +
+        "s";
+
 
     document.getElementById(
         "resultTotalChars"
     ).textContent =
         stats.totalChars;
 
+
     testArea.classList.add(
         "hidden"
     );
+
 
     results.classList.remove(
         "hidden"
     );
 
-    saveHistory(stats);
+
+    saveHistory(
+        stats
+    );
+
 
     showHistory();
 
 }
 
+"""
 
-/* ---------------------------------------------------------
-   REPLAY VOICE
---------------------------------------------------------- */
+html_code += r"""
+
+/* =========================================================
+   REPLAY BUTTON
+   ========================================================= */
 
 replayButton.addEventListener(
     "click",
@@ -1649,33 +2628,125 @@ replayButton.addEventListener(
 
         }
 
+
+        if (
+            currentMode === "word" &&
+            wordList.length > 0
+        ) {
+
+            /*
+               Replay the currently active word.
+            */
+
+            if (
+                speechAvailable
+            ) {
+
+                window.speechSynthesis.cancel();
+
+                const word =
+                    wordList[currentWordIndex]
+                        ? wordList[currentWordIndex].word
+                        : wordList[0].word;
+
+
+                const utterance =
+                    new SpeechSynthesisUtterance(
+                        word
+                    );
+
+
+                const selectedVoice =
+                    getSelectedVoice();
+
+
+                if (selectedVoice) {
+
+                    utterance.voice =
+                        selectedVoice;
+
+                }
+
+
+                utterance.rate =
+                    parseFloat(
+                        speechRate.value
+                    );
+
+
+                utterance.volume =
+                    parseFloat(
+                        speechVolume.value
+                    );
+
+
+                currentUtterance =
+                    utterance;
+
+
+                window.speechSynthesis.speak(
+                    utterance
+                );
+
+            }
+
+        }
+
     }
 );
 
 
-/* ---------------------------------------------------------
-   BUTTON EVENTS
---------------------------------------------------------- */
+/* =========================================================
+   NORMAL START
+   ========================================================= */
 
 normalStart.addEventListener(
     "click",
     function() {
 
-        startTest("normal");
+        startTest(
+            "normal"
+        );
 
     }
 );
 
+
+/* =========================================================
+   VOICE START
+   ========================================================= */
 
 voiceStart.addEventListener(
     "click",
     function() {
 
-        startTest("voice");
+        startTest(
+            "voice"
+        );
 
     }
 );
 
+
+/* =========================================================
+   WORD-BY-WORD START
+   ========================================================= */
+
+wordStart.addEventListener(
+    "click",
+    function() {
+
+        startTest(
+            "word"
+        );
+
+    }
+);
+
+
+/* =========================================================
+   PAUSE BUTTON
+   ========================================================= */
 
 pauseButton.addEventListener(
     "click",
@@ -1687,6 +2758,10 @@ pauseButton.addEventListener(
 );
 
 
+/* =========================================================
+   FINISH BUTTON
+   ========================================================= */
+
 finishButton.addEventListener(
     "click",
     function() {
@@ -1697,25 +2772,16 @@ finishButton.addEventListener(
 );
 
 
+/* =========================================================
+   RESTART BUTTON
+   ========================================================= */
+
 restartButton.addEventListener(
     "click",
     function() {
 
-        if (speechAvailable) {
+        resetTestState();
 
-            window.speechSynthesis.cancel();
-
-        }
-
-        clearInterval(
-            timerInterval
-        );
-
-        testRunning = false;
-
-        testPaused = false;
-
-        typingArea.disabled = false;
 
         testArea.classList.add(
             "hidden"
@@ -1725,9 +2791,11 @@ restartButton.addEventListener(
             "hidden"
         );
 
+
         openingScreen.classList.remove(
             "hidden"
         );
+
 
         messageElement.textContent =
             "Your statistics will update while you type.";
@@ -1736,29 +2804,51 @@ restartButton.addEventListener(
 );
 
 
-/* ---------------------------------------------------------
-   START ANOTHER TEST
---------------------------------------------------------- */
+/* =========================================================
+   TRY ANOTHER TEST
+   ========================================================= */
 
 anotherTest.addEventListener(
     "click",
     function() {
 
+        resetTestState();
+
+
         results.classList.add(
             "hidden"
         );
+
+
+        testArea.classList.add(
+            "hidden"
+        );
+
 
         openingScreen.classList.remove(
             "hidden"
         );
 
+
+        currentPassage = "";
+
+        passageElement.textContent = "";
+
+
+        typingArea.value = "";
+
+        typingArea.disabled = false;
+
+
+        normalDuration.focus();
+
     }
 );
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    HISTORY
---------------------------------------------------------- */
+   ========================================================= */
 
 function getHistory() {
 
@@ -1770,7 +2860,9 @@ function getHistory() {
             )
         ) || [];
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         return [];
 
@@ -1779,17 +2871,44 @@ function getHistory() {
 }
 
 
+/* =========================================================
+   SAVE HISTORY
+   ========================================================= */
+
 function saveHistory(stats) {
 
     const history =
         getHistory();
 
+
+    let modeName =
+        "Normal";
+
+
+    if (
+        currentMode === "voice"
+    ) {
+
+        modeName =
+            "Voice";
+
+    }
+
+
+    if (
+        currentMode === "word"
+    ) {
+
+        modeName =
+            "Word-by-Word Voice";
+
+    }
+
+
     history.unshift({
 
         mode:
-            currentMode === "voice"
-            ? "Voice"
-            : "Normal",
+            modeName,
 
         wpm:
             stats.wpm,
@@ -1802,21 +2921,26 @@ function saveHistory(stats) {
 
     });
 
-    /*
-       Keep the latest 10 tests.
-    */
 
     const limited =
-        history.slice(0, 10);
+        history.slice(
+            0,
+            10
+        );
+
 
     try {
 
         localStorage.setItem(
             "accessibleTypingHistory",
-            JSON.stringify(limited)
+            JSON.stringify(
+                limited
+            )
         );
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.log(
             "History could not be saved."
@@ -1827,37 +2951,57 @@ function saveHistory(stats) {
 }
 
 
+/* =========================================================
+   SHOW HISTORY
+   ========================================================= */
+
 function showHistory() {
 
     const history =
         getHistory();
+
 
     const body =
         document.getElementById(
             "historyBody"
         );
 
+
     body.innerHTML = "";
 
-    if (history.length === 0) {
+
+    if (
+        history.length === 0
+    ) {
 
         const row =
-            document.createElement("tr");
+            document.createElement(
+                "tr"
+            );
+
 
         row.innerHTML =
             "<td colspan='4'>No previous tests.</td>";
 
-        body.appendChild(row);
+
+        body.appendChild(
+            row
+        );
+
 
         return;
 
     }
 
+
     history.forEach(
         function(item) {
 
             const row =
-                document.createElement("tr");
+                document.createElement(
+                    "tr"
+                );
+
 
             row.innerHTML =
 
@@ -1871,13 +3015,18 @@ function showHistory() {
 
                 "<td>" +
                 item.accuracy +
-                "%</td>" +
+                "%" +
+                "</td>" +
 
                 "<td>" +
                 item.time +
-                "s</td>";
+                "s" +
+                "</td>";
 
-            body.appendChild(row);
+
+            body.appendChild(
+                row
+            );
 
         }
     );
@@ -1885,42 +3034,29 @@ function showHistory() {
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    INITIAL HISTORY
---------------------------------------------------------- */
+   ========================================================= */
 
 showHistory();
+
 
 </script>
 
 </body>
+
 </html>
 """
-html_code += r"""
 
-<!--
-The application is intentionally implemented entirely
-inside the browser.
 
-This means:
-
-1. Voice playback happens on the user's device.
-2. Speech speed can be changed.
-3. Speech volume can be changed.
-4. The browser's available voices can be selected.
-5. Voice playback does not require pyttsx3.
-6. The typing test works without an internet connection
-   after the Streamlit page has loaded.
--->
-
-"""
-
-# ------------------------------------------------------------
-# DISPLAY THE COMPLETE APPLICATION
-# ------------------------------------------------------------
+# ============================================================
+# DISPLAY COMPLETE APPLICATION
+# ============================================================
 
 components.html(
     html_code,
-    height=1250,
+    height=1400,
+    scrolling=true
+)_
     scrolling=True
 )
